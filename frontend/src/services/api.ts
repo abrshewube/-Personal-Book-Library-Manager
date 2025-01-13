@@ -1,4 +1,4 @@
-import axios, { AxiosError } from 'axios';
+import axios from 'axios';
 import { Book, BookInput } from '../types/book';
 
 const api = axios.create({

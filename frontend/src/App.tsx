@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from 'react-query';
 import { BookCard } from './components/BookCard';
 import { BookForm } from './components/BookForm';
@@ -12,6 +12,7 @@ function App() {
   const [search, setSearch] = useState('');
   const [showForm, setShowForm] = useState(false);
   const [editingBook, setEditingBook] = useState<Book | null>(null);
+  const [foundBookData, setFoundBookData] = useState<Partial<BookInput> | null>(null);
   
   const queryClient = useQueryClient();
 
@@ -26,6 +27,7 @@ function App() {
       queryClient.invalidateQueries('books');
       toast.success('Book added successfully');
       setShowForm(false);
+      setFoundBookData(null);
     },
     onError: (error: Error) => {
       toast.error(error.message);
@@ -41,6 +43,7 @@ function App() {
         toast.success('Book updated successfully');
         setShowForm(false);
         setEditingBook(null);
+        setFoundBookData(null);
       },
       onError: (error: Error) => {
         toast.error(error.message);
@@ -62,7 +65,7 @@ function App() {
     try {
       const bookData = await bookService.searchBookByISBN(isbn);
       toast.success('Book details found');
-      // Handle the found book data
+      setFoundBookData(bookData);
     } catch (error) {
       if (error instanceof Error) {
         toast.error(error.message);
@@ -70,6 +73,12 @@ function App() {
         toast.error('Failed to search book');
       }
     }
+  };
+
+  const handleCloseForm = () => {
+    setShowForm(false);
+    setEditingBook(null);
+    setFoundBookData(null);
   };
 
   const filteredBooks = books.filter((book) =>
@@ -102,6 +111,7 @@ function App() {
           <button
             onClick={() => {
               setEditingBook(null);
+              setFoundBookData(null);
               setShowForm(true);
             }}
             className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
@@ -123,6 +133,7 @@ function App() {
               </h2>
               <BookForm
                 initialData={editingBook || undefined}
+                foundBookData={foundBookData}
                 onSubmit={(data) => {
                   if (editingBook) {
                     updateBookMutation.mutate({ id: editingBook.id, data });
@@ -130,10 +141,7 @@ function App() {
                     createBookMutation.mutate(data);
                   }
                 }}
-                onCancel={() => {
-                  setShowForm(false);
-                  setEditingBook(null);
-                }}
+                onCancel={handleCloseForm}
                 onSearchISBN={handleSearchISBN}
               />
             </div>

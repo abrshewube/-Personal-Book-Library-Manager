@@ -27,7 +27,7 @@ export const BookCard: React.FC<BookCardProps> = ({
           <button
             onClick={() => onEdit(book)}
             className="p-2 text-blue-600 hover:bg-blue-50 rounded-full"
-          >
+          > 
             <Edit size={18} />
           </button>
           <button
@@ -41,7 +41,7 @@ export const BookCard: React.FC<BookCardProps> = ({
 
       <div className="flex items-center gap-4 mb-3">
         <button
-          onClick={() => onToggleRead(book.id, !book.readStatus)}
+          // onClick={() => onToggleRead(book.id, !book.readStatus)}
           className={clsx(
             "flex items-center gap-2 px-3 py-1 rounded-full text-sm",
             book.readStatus

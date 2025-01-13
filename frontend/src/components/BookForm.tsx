@@ -1,9 +1,10 @@
-import React from 'react';
-import { Book, BookInput } from '../types/book';
-import { Search } from 'lucide-react';
+import React, { useEffect } from "react";
+import { Book, BookInput } from "../types/book";
+import { Search } from "lucide-react";
 
 interface BookFormProps {
   initialData?: Book;
+  foundBookData?: Partial<BookInput> | null;
   onSubmit: (data: BookInput) => void;
   onCancel: () => void;
   onSearchISBN: (isbn: string) => Promise<void>;
@@ -11,22 +12,32 @@ interface BookFormProps {
 
 export const BookForm: React.FC<BookFormProps> = ({
   initialData,
+  foundBookData,
   onSubmit,
   onCancel,
   onSearchISBN,
 }) => {
   const [formData, setFormData] = React.useState<BookInput>({
-    title: initialData?.title || '',
-    author: initialData?.author || '',
-    isbn: initialData?.isbn || '',
-    readStatus: initialData?.readStatus || false,
+    title: initialData?.title || "",
+    author: initialData?.author || "",
+    isbn: initialData?.isbn || "",
+    readStatus: initialData?.readStatus ?? false,
     userRating: initialData?.userRating || 0,
-    notes: initialData?.notes || '',
+    notes: initialData?.notes || "",
   });
+
+  useEffect(() => {
+    if (foundBookData) {
+      setFormData((prev) => ({
+        ...prev,
+        ...foundBookData,
+      }));
+    }
+  }, [foundBookData]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    onSubmit(formData);
+    onSubmit(formData); // Ensure formData includes the current state of readStatus
   };
 
   return (
@@ -85,7 +96,7 @@ export const BookForm: React.FC<BookFormProps> = ({
           <option value="0">No rating</option>
           {[1, 2, 3, 4, 5].map((rating) => (
             <option key={rating} value={rating}>
-              {rating} star{rating !== 1 ? 's' : ''}
+              {rating} star{rating !== 1 ? "s" : ""}
             </option>
           ))}
         </select>
@@ -106,7 +117,7 @@ export const BookForm: React.FC<BookFormProps> = ({
       <div>
         <label className="block text-sm font-medium text-gray-700">Notes</label>
         <textarea
-          value={formData.notes || ''}
+          value={formData.notes || ""}
           onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
           rows={3}
           className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2"
@@ -125,7 +136,7 @@ export const BookForm: React.FC<BookFormProps> = ({
           type="submit"
           className="px-4 py-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-md"
         >
-          {initialData ? 'Update Book' : 'Add Book'}
+          {initialData ? "Update Book" : "Add Book"}
         </button>
       </div>
     </form>

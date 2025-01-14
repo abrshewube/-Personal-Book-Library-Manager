@@ -43,6 +43,7 @@ export const bookService = {
   updateBook: async (id: number, book: BookInput): Promise<Book> => {
     try {
       const { data } = await api.put(`/books/${id}`, book);
+      console.log("data",data);
       return data;
     } catch (error) {
       throw handleError(error);

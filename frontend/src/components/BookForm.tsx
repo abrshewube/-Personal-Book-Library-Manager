@@ -21,7 +21,7 @@ export const BookForm: React.FC<BookFormProps> = ({
     title: initialData?.title || "",
     author: initialData?.author || "",
     isbn: initialData?.isbn || "",
-    readStatus: initialData?.readStatus ?? false,
+    readStatus: initialData?.readStatus ?? false, // Ensure it's a boolean with default false
     userRating: initialData?.userRating || 0,
     notes: initialData?.notes || "",
   });
@@ -31,13 +31,19 @@ export const BookForm: React.FC<BookFormProps> = ({
       setFormData((prev) => ({
         ...prev,
         ...foundBookData,
+        readStatus: foundBookData.readStatus ?? prev.readStatus, // Preserve readStatus if not in foundBookData
       }));
     }
   }, [foundBookData]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    onSubmit(formData); // Ensure formData includes the current state of readStatus
+    // Ensure readStatus is always a boolean before submitting
+    const submissionData: BookInput = {
+      ...formData,
+      readStatus: Boolean(formData.readStatus),
+    };
+    onSubmit(submissionData);
   };
 
   return (
@@ -106,7 +112,7 @@ export const BookForm: React.FC<BookFormProps> = ({
         <label className="flex items-center gap-2">
           <input
             type="checkbox"
-            checked={formData.readStatus}
+            checked={Boolean(formData.readStatus)}
             onChange={(e) => setFormData({ ...formData, readStatus: e.target.checked })}
             className="rounded border-gray-300 text-blue-600"
           />

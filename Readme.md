@@ -1,6 +1,6 @@
 # Personal Book Library Manager
 
-A full-stack web application for managing your personal book collection.
+A full-stack web application for managing your personal book collection. Keep track of your books, reading status, ratings, and notes all in one place.
 
 [![Live Demo](https://img.shields.io/badge/Live%20Demo-Visit%20Site-blue)](https://personal-book-library-manager.vercel.app/)
 
@@ -97,8 +97,11 @@ Search for a book by ISBN using Open Library API
 ### Prerequisites
 - Node.js (v14 or higher)
 - npm or yarn
+- Docker (optional)
 
 ### Installation
+
+#### Option 1: Local Setup
 
 1. Clone the repository:
 ```bash
@@ -119,12 +122,53 @@ npm install
 npm run dev
 ```
 
-## Testing
-The project includes comprehensive test coverage for all API endpoints using Jest and Supertest.
-### Running Tests
+#### Option 2: Docker Setup
+
+1. Clone the repository:
 ```bash
+git clone https://github.com/abrshewube/-Personal-Book-Library-Manager.git
+```
+
+2. Build and run with Docker Compose:
+```bash
+docker-compose up --build
+```
+
+This will:
+- Build the frontend container
+- Build the backend container
+- Start both services
+- Frontend will be available at http://localhost:5173
+- Backend will be available at http://localhost:3000
+
+To stop the containers:
+```bash
+docker-compose down
+```
+
+## Testing
+
+The project includes comprehensive test coverage for all API endpoints using Jest and Supertest.
+
+### Running Tests
+
+#### Local Testing
+```bash
+cd backend
 npm test
 ```
+
+### Test Coverage
+- GET /api/books - List all books
+- POST /api/books - Create new book
+- GET /api/books/:id - Get single book
+- PUT /api/books/:id - Update book
+- DELETE /api/books/:id - Delete book
+- GET /api/books/search/:isbn - Search by ISBN
+
 ## Live Demo
 
 Visit the live demo at [https://personal-book-library-manager.vercel.app/](https://personal-book-library-manager.vercel.app/)
+
+## Acknowledgments
+- [Open Library API](https://openlibrary.org/developers/api) for book data

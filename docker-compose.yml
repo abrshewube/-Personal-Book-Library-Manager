@@ -13,7 +13,7 @@ services:
     build:
       context: ./frontend
     ports:
-      - "4173:4173"
+      - "5173:5173"
     volumes:
       - ./frontend:/app
     environment:

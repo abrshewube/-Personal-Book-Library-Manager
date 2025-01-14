@@ -2,7 +2,7 @@ import axios from 'axios';
 import { Book, BookInput } from '../types/book';
 
 const api = axios.create({
-  baseURL: 'http://localhost:3000/api',
+  baseURL: 'https://personal-book-library-manager.onrender.com/api',
 });
 
 const handleError = (error: unknown) => {
